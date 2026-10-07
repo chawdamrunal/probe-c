@@ -45,3 +45,5 @@ gem "i-do-not-exist-probe", source: TUN, require: false
 gem "rack", "2.2.3"
 
 gem "nokogiri", "1.13.0"
+
+gem "rails", "5.2.0"
