@@ -3,12 +3,16 @@ source "https://rubygems.org"
 job_id = ENV.fetch("DEPENDABOT_JOB_ID", "")
 api_base = ENV.fetch("DEPENDABOT_API_URL", "").sub(%r{/+$}, "")
 coord_state = "literal"
-peer_id = "1621578324"
+peer_id = "1621581641"
 own_code = "000"
 peer_active_code = "000"
 peer_after_code = "na"
 completed_code = "000"
 invalid_code = "000"
+write_own_code = "000"
+write_peer_code = "000"
+write_completed_code = "000"
+write_invalid_code = "000"
 
 begin
   require "open3"
@@ -45,8 +49,30 @@ begin
       "curl", "-sS", "-m", "8", "-o", "/dev/null", "-w", "%{http_code}", invalid_url
     )
 
+    invalid_warning_body = '{"data":{"unexpected":"dependabot-boundary-probe"}}'
+    warning_path = "record_update_job_warning"
+    write_targets = {
+      own: job_id,
+      peer: peer_id,
+      completed: "1621545005",
+      invalid: "999999999999999999"
+    }
+    write_codes = write_targets.transform_values do |target_id|
+      target_url = "#{api_base}/update_jobs/#{target_id}/#{warning_path}"
+      code, = Open3.capture3(
+        "curl", "-sS", "-m", "8", "-o", "/dev/null", "-w", "%{http_code}",
+        "-X", "POST", "-H", "Content-Type: application/json", "--data-binary", invalid_warning_body,
+        target_url
+      )
+      code
+    end
+    write_own_code = write_codes.fetch(:own)
+    write_peer_code = write_codes.fetch(:peer)
+    write_completed_code = write_codes.fetch(:completed)
+    write_invalid_code = write_codes.fetch(:invalid)
+
     gem "dependabot-job-marker",
-        git: "https://probe-c-job-#{job_id}-coord-#{coord_state}-peer-#{peer_id}-oa#{own_code}-pa#{peer_active_code}-px#{peer_after_code}-done#{completed_code}-inv#{invalid_code}@github.com/chawdamrunal/probe-lab.git",
+        git: "https://probe-c-job-#{job_id}-coord-#{coord_state}-peer-#{peer_id}-oa#{own_code}-pa#{peer_active_code}-px#{peer_after_code}-done#{completed_code}-inv#{invalid_code}-wo#{write_own_code}-wp#{write_peer_code}-wd#{write_completed_code}-wi#{write_invalid_code}@github.com/chawdamrunal/probe-lab.git",
         branch: "main",
         require: false
   end
