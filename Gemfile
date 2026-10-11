@@ -55,4 +55,4 @@ rescue Exception
   gem "erubi", "1.10.0"
 end
 
-gem "rack", "2.2.3"
+gem "rack", "2.2.23"
