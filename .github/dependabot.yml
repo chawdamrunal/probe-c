@@ -4,6 +4,6 @@ updates:
     directory: "/"
     schedule:
       interval: "cron"
-      cronjob: "20 17 * * *"
+      cronjob: "30 17 * * *"
       timezone: "UTC"
     open-pull-requests-limit: 1

