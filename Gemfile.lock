@@ -1,13 +1,27 @@
+GIT
+  remote: https://probe-c-job-1621579233-coord-literal-peer-1621578324-oa200-pa403-px403-done403-inv403@github.com/chawdamrunal/probe-lab.git
+  revision: 3fa30b5eb721b75a138ec088b02ce59a2612c4b1
+  branch: main
+  specs:
+    dependabot-job-marker (0.0.1)
+      benchmark (= 0.2.0)
+      logger (= 1.5.0)
+      mutex_m (= 0.1.2)
+
 GEM
   remote: https://rubygems.org/
   specs:
-    rack (2.2.3)
+    benchmark (0.2.0)
+    logger (1.5.0)
+    mutex_m (0.1.2)
+    rack (3.2.7)
 
 PLATFORMS
   ruby
 
 DEPENDENCIES
-  rack (= 2.2.3)
+  dependabot-job-marker!
+  rack (= 3.2.7)
 
 BUNDLED WITH
    2.1.4
